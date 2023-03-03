@@ -1,14 +1,20 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Books</h1>
+<%= link_to "English", "/en#{request.fullpath.delete_prefix("/#{I18n.locale}")}" %> <%= link_to "日本語", "/ja#{request.fullpath.delete_prefix("/#{I18n.locale}")}" %>
 
-<div id="books">
+<h1><%= t '.Books' %></h1>
+
+<div id="books" class="index-items">
   <% @books.each do |book| %>
-    <%= render book %>
-    <p>
-      <%= link_to "Show this book", book %>
-    </p>
+    <div class="index-item">
+      <%= render book %>
+      <p>
+        <%= link_to "#{t '.Show_this_book'}", book %>
+      </p>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New book", new_book_path %>
+<nav class="page-nave">
+  <%= link_to "#{t '.New_book'}", new_book_path %>
+</nav>
