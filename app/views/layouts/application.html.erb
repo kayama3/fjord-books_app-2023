@@ -11,7 +11,7 @@
   </head>
 
   <body class="<%= params[:action] %>">
-    <%= link_to "English", "/en#{request.fullpath.delete_prefix("/#{I18n.locale}")}" %> <%= link_to "日本語", "/ja#{request.fullpath.delete_prefix("/#{I18n.locale}")}" %>
+    <%= link_to 'English', locale: 'en' %> <%= link_to '日本語', locale: 'ja' %>
     <%= yield %>
   </body>
 </html>
