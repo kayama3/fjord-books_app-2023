@@ -15,22 +15,16 @@ en:
         restrict_dependent_destroy:
           has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
-  books:
-    index:
-      Books: 'Books'
-      Show_this_book: 'Show this book'
-      New_book: 'New book'
-    new:
-      New_book: 'New book'
-      Back_to_books: 'Back to books'
-    show:
-      Edit_this_book: 'Edit this book'
-      Back_to_books: 'Back to books'
-      Destroy_this_book: 'Destroy this book'
-    edit:
-      Editing_book: 'Editing book'
-      Show_this_book: 'Show this book'
-      Back_to_books: 'Back to books'
+  views:
+    common:
+      show: 'Show this %{name}'
+      new: 'New %{name}'
+      edit: 'Edit this %{name}'
+      back: 'Back to %{name}'
+      destroy: 'Destroy this %{name}'
+      title_index: '%{name}'
+      title_new: 'New %{name}'
+      title_edit: 'Editing %{name}'
   date:
     abbr_day_names:
     - Sun
