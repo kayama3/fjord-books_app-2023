@@ -22,9 +22,10 @@ en:
       edit: 'Edit this %{name}'
       back: 'Back to %{name}'
       destroy: 'Destroy this %{name}'
-      title_index: '%{name}'
-      title_new: 'New %{name}'
-      title_edit: 'Editing %{name}'
+      title:
+        index: '%{name}'
+        new: 'New %{name}'
+        edit: 'Editing %{name}'
   date:
     abbr_day_names:
     - Sun
