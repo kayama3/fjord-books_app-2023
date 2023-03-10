@@ -5,4 +5,4 @@ ja:
       last: "最後"
       previous: "前へ"
       next: "次へ"
-      truncate: "..."
+      truncate: "&hellip;"
