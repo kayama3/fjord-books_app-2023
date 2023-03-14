@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
 
   def set_locale
-    cookies[:locale] = :ja
+    cookies[:locale] = params[:locale]
     I18n.locale = cookies[:locale] || I18n.default_locale
   end
 end

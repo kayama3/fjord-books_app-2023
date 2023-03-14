@@ -26,6 +26,9 @@ ja:
         index: '%{name}の一覧'
         new: '%{name}の作成'
         edit: '%{name}の編集'
+      locale:
+        en: '英語'
+        ja: '日本語'
   date:
     abbr_day_names:
     - 日
