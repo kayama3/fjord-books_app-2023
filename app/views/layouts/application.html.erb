@@ -11,6 +11,9 @@
   </head>
 
   <body class="<%= params[:action] %>">
+    <% I18n.available_locales.each do |locale| %>
+      <%= link_to t("views.common.locale.#{locale}"), locale: locale %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
