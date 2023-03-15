@@ -61,7 +61,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   protected
-  def after_update_path_for(resource)
+
+  def after_update_path_for(_resource)
     books_path
   end
 end
