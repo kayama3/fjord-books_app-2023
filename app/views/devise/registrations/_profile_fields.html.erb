@@ -4,6 +4,13 @@
 </div>
 
 <div class="field">
+  <%= f.label :icon %><br />
+  <%= f.file_field :icon %>
+  <p>現在のアイコン画像</p>
+  <%= image_tag @user.icon.variant(:thumb) if @user.icon.attached? %>
+</div>
+
+<div class="field">
   <%= f.label :postal_code %><br />
   <%= f.text_field :postal_code %>
 </div>
