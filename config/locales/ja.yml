@@ -194,6 +194,21 @@ ja:
       title_edit: "%{name}の編集"
       error: エラー
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
+    devise:
+      login_as: 'ログイン中:'
+      edit_prof: 'プロフィールを編集'
+      logout: 'ログアウト'
+      signup: '登録'
+      signin: 'サインイン'
+      login: 'ログイン'
+      pass_length: '最低%{size}文字'
+      forgot_pass: 'パスワードの再設定'
+      reset_pass: '再設定メールを送信'
+      leave_brank: 'パスワードを変更したくない場合は空欄のままにしてください'
+      confirm_changes: '変更を保存するために現在のパスワードを入力してください'
+      cancel: 'アカウントを消去'
+      unhappy: 'このアカウントは不適切ですか？'
+      back: '戻る'
     pagination:
       first: '« 最初'
       last: '最後 »'

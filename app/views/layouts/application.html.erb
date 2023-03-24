@@ -11,6 +11,24 @@
   </head>
 
   <body class="<%= params[:action] %>">
+
+    <p class="navbar-text pull-right">
+      <% if user_signed_in? %>
+        <%= t('views.devise.login_as') %> <strong><%= current_user.email %></strong>.
+        <%= link_to t('views.devise.edit_prof'), edit_user_registration_path, class: 'navbar-link' %> |
+        <%= link_to t('views.devise.logout'), destroy_user_session_path, method: :delete, class: 'navbar-link' %>
+      <% else %>
+        <%= link_to t('views.devise.signup'), new_user_registration_path, class: 'navbar-link' %> |
+        <%= link_to t('views.devise.login'), new_user_session_path, class: 'navbar-link' %>
+      <% end %>
+    </p>
+
+    <% if notice %>
+      <p class="alert alert-success" <%= notice %>>
+    <% end %>
+    <% if alert %>
+      <p class="alert alert-danger" <%= alert %>>
+    <% end %>
     <%= yield %>
   </body>
 </html>
