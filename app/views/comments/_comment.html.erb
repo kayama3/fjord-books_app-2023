@@ -1,0 +1,19 @@
+<p>
+  <% if comments.present? %>
+  <table>
+    <% comments.each do |comment| %>
+      <ul>
+        <li><%= comment.user.name.present? ? comment.user.name : comment.user.email %>
+        <%= i18n_localize_time(comment.created_at, 'Tokyo') %>
+        <%= comment.body %>
+        <% if current_user.id == comment.user_id %>
+          <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), [commentable, comment], method: :delete %>
+        <% end %>
+        </li>
+      </ul>
+    <% end %>
+  <% else %>
+    No Comments
+  <% end %>
+  </table>
+</p>

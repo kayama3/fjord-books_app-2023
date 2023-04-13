@@ -1,0 +1,17 @@
+<div id="<%= dom_id report %>">
+  <p>
+    <strong>Date:</strong>
+    <%= i18n_localize_time(report.created_at, 'Tokyo') %>
+  </p>
+
+  <p>
+    <strong>Title:</strong>
+    <%= report.title %>
+  </p>
+
+  <p>
+    <strong>Body:</strong>
+    <%= report.body %>
+  </p>
+
+</div>
