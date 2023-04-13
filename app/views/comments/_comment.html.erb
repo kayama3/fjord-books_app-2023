@@ -13,7 +13,7 @@
       </ul>
     <% end %>
   <% else %>
-    No Comments
+    <%= t('views.common.none', name: Comment.model_name.human.downcase) %>
   <% end %>
   </table>
 </p>
