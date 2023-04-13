@@ -25,4 +25,10 @@ class ApplicationController < ActionController::Base
   def signed_in_root_path(_resource_or_scope)
     user_path(current_user)
   end
+
+  def verificate_user(object)
+    unless object.user_id == current_user.id
+      redirect_to request.referer
+    end
+  end
 end
