@@ -27,8 +27,8 @@ class ApplicationController < ActionController::Base
   end
 
   def verificate_user(object)
-    unless object.user_id == current_user.id
-      redirect_to request.referer
-    end
+    return if object.user_id == current_user.id
+
+    redirect_to request.referer
   end
 end

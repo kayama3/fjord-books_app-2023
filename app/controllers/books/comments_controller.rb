@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Books::CommentsController < ApplicationController
   before_action :set_book
-  before_action :set_comment, ->{verificate_user(@comment)}, only: %i[ destroy ]
+  before_action :set_comment, -> { verificate_user(@comment) }, only: %i[destroy]
 
   # POST /comments or /comments.json
   def create
@@ -8,7 +10,7 @@ class Books::CommentsController < ApplicationController
     @comment[:user_id] = current_user.id
 
     if @comment.save
-      redirect_to [@book, @comment], notice: "Comment was successfully created."
+      redirect_to [@book, @comment], notice: 'Comment was successfully created.'
     else
       redirect_to @book
     end
@@ -18,21 +20,22 @@ class Books::CommentsController < ApplicationController
   def destroy
     @comment.destroy
 
-    redirect_to @book, notice: "Comment was successfully destroyed."
+    redirect_to @book, notice: 'Comment was successfully destroyed.'
   end
 
   private
-    def set_book
-      @book = Book.find(params[:book_id])
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_comment
-      @comment = Comment.find(params[:id])
-    end
+  def set_book
+    @book = Book.find(params[:book_id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def comment_params
-      params.require(:comment).permit(:body)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_comment
+    @comment = Comment.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def comment_params
+    params.require(:comment).permit(:body)
+  end
 end
