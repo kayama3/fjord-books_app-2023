@@ -49,22 +49,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_145349) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "body"
-    t.string "commentable_type"
-    t.integer "commentable_id"
+    t.string "body", null: false
+    t.string "commentable_type", null: false
+    t.integer "commentable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "reports", force: :cascade do |t|
-    t.string "title"
-    t.string "body"
+    t.string "title", null: false
+    t.string "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
