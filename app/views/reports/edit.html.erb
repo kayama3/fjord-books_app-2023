@@ -5,6 +5,6 @@
 <br>
 
 <div>
-  <%= link_tot('views.common.show', name: Report.model_name.human.downcase), @report %> |
-  <%= link_tot('views.common.back', name: i18n_pluralize(Report.model_name.human.downcase)), reports_path %>
+  <%= link_to t('views.common.show', name: Report.model_name.human.downcase), @report %> |
+  <%= link_to t('views.common.back', name: i18n_pluralize(Report.model_name.human.downcase)), reports_path %>
 </div>

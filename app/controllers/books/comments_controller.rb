@@ -2,7 +2,7 @@
 
 class Books::CommentsController < ApplicationController
   before_action :set_book
-  before_action :set_comment, -> { verificate_user(@comment) }, only: %i[destroy]
+  before_action :set_comment, only: %i[destroy]
 
   # POST /comments or /comments.json
   def create
@@ -10,7 +10,7 @@ class Books::CommentsController < ApplicationController
     @comment[:user_id] = current_user.id
 
     if @comment.save
-      redirect_to [@book, @comment], notice: 'Comment was successfully created.'
+      redirect_to [@book, @comment], notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       redirect_to @book
     end
@@ -20,7 +20,7 @@ class Books::CommentsController < ApplicationController
   def destroy
     @comment.destroy
 
-    redirect_to @book, notice: 'Comment was successfully destroyed.'
+    redirect_to @book, notice: t('controllers.common.notice_destroy', name: Comment.model_name.human)
   end
 
   private
@@ -31,7 +31,7 @@ class Books::CommentsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment
-    @comment = Comment.find(params[:id])
+    @comment = current_user.comments.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

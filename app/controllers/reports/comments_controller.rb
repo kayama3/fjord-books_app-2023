@@ -10,7 +10,7 @@ class Reports::CommentsController < ApplicationController
     @comment[:user_id] = current_user.id
 
     if @comment.save
-      redirect_to [@report, @comment], notice: 'Comment was successfully created.'
+      redirect_to [@report, @comment], notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       redirect_to @report
     end
@@ -20,7 +20,7 @@ class Reports::CommentsController < ApplicationController
   def destroy
     @comment.destroy
 
-    redirect_to @report, notice: 'Comment was successfully destroyed.'
+    redirect_to @report, notice: t('controllers.common.notice_destroy', name: Comment.model_name.human)
   end
 
   private
@@ -31,7 +31,7 @@ class Reports::CommentsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment
-    @comment = Comment.find(params[:id])
+    @comment = current_user.comments.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
