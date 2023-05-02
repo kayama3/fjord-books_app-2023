@@ -10,7 +10,7 @@ class Books::CommentsController < ApplicationController
     @comment[:user_id] = current_user.id
 
     if @comment.save
-      redirect_to [@book, @comment], notice: t('controllers.common.notice_create', name: Comment.model_name.human)
+      redirect_to @book, notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       redirect_to @book
     end

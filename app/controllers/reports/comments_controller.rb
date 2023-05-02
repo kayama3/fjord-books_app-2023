@@ -10,7 +10,7 @@ class Reports::CommentsController < ApplicationController
     @comment[:user_id] = current_user.id
 
     if @comment.save
-      redirect_to [@report, @comment], notice: t('controllers.common.notice_create', name: Comment.model_name.human)
+      redirect_to @report, notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       redirect_to @report
     end
