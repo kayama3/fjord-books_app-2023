@@ -9,6 +9,7 @@ class ReportsController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
+    @mentioned_reports = @report.mentioned_reports.all
   end
 
   # GET /reports/new
@@ -20,9 +21,14 @@ class ReportsController < ApplicationController
 
   def create
     @report = current_user.reports.new(report_params)
+    report_ids = @report[:content].scan(/http:\/\/localhost:3000\/reports\/(\d+)/).flatten
 
     if @report.save
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
+
+      report_ids.each do |report_id|
+        @report.mentioning_relations.create( mentioned_report_id: report_id.to_i )
+      end
     else
       render :new, status: :unprocessable_entity
     end
