@@ -9,7 +9,7 @@ class ReportsController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
-    @mentioned_reports = @report.mentioned_reports.all
+    @mentioned_reports = @report.mentioned_reports
   end
 
   # GET /reports/new
@@ -21,13 +21,12 @@ class ReportsController < ApplicationController
 
   def create
     @report = current_user.reports.new(report_params)
-    report_ids = @report[:content].scan(/http:\/\/localhost:3000\/reports\/(\d+)/).flatten
 
     if @report.save
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
 
-      report_ids.each do |report_id|
-        @report.mentioning_relations.create( mentioned_report_id: report_id.to_i )
+      mentioning_report_ids.each do |report_id|
+        @report.mentioning_relations.create(mentioned_report_id: report_id)
       end
     else
       render :new, status: :unprocessable_entity
@@ -37,6 +36,13 @@ class ReportsController < ApplicationController
   def update
     if @report.update(report_params)
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
+
+      mentioning_report_ids.each do |report_id|
+        @report.mentioning_relations.create(mentioned_report_id: report_id)
+      end
+      unmentioned_report_ids = @report.mentioning_reports.map(&:id) - mentioning_report_ids
+
+      @report.mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).map(&:destroy)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -56,5 +62,9 @@ class ReportsController < ApplicationController
 
   def report_params
     params.require(:report).permit(:title, :content)
+  end
+
+  def mentioning_report_ids
+    @report[:content].scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
   end
 end
