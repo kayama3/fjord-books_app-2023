@@ -1,0 +1,17 @@
+<p>
+  <% if comments.present? %>
+    <% comments.each do |comment| %>
+      <ul>
+        <li><%= comment.user.name.present? ? comment.user.name : comment.user.email %>
+        <%= l comment.created_at, format: :long %>
+        <%= comment.body %>
+        <% if current_user.id == comment.user_id %>
+          <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), [commentable, comment], method: :delete %>
+        <% end %>
+        </li>
+      </ul>
+    <% end %>
+  <% else %>
+    <%= t('views.common.none', name: Comment.model_name.human.downcase) %>
+  <% end %>
+</p>
