@@ -3,8 +3,12 @@ class CreateMentions < ActiveRecord::Migration[7.0]
     create_table :mentions do |t|
       
       t.timestamps
-      t.references :mentioning_report, null: false, foreign_key: { to_table: :reports }, unique: true
-      t.references :mentioned_report, null: false, foreign_key: { to_table: :reports }, unique: true
+
+      t.integer :mentioning_report_id, null: false
+      t.integer :mentioned_report_id, null: false
+      t.index [:mentioning_report_id, :mentioned_report_id], unique:true
     end
+    add_foreign_key :mentions, :reports, column: 'mentioning_report_id'
+    add_foreign_key :mentions, :reports, column: 'mentioned_report_id'
   end
 end
