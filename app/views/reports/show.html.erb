@@ -6,13 +6,13 @@
 
 <%= render 'shared/comments', commentable: @report %>
 
-<% if @mentioned_reports.exists? %>
+<% if @report.mentioned_reports.exists? %>
   <p><%= t('views.common.mention_from', name: Report.model_name.human) %></p>
-  <% @mentioned_reports.each do |report| %>
-    <ul>
-      <li><a href="http://localhost:3000/reports/<%= report[:id] %>"><%= report[:title] %></a></li>
-    </ul>
-  <% end %>
+  <ul>
+    <% @report.mentioned_reports.each do |report| %>
+      <li><%= link_to report[:title], report %></li>
+    <% end %>
+  </ul>
 <% end %>
 
 <nav class="page-nav">

@@ -9,7 +9,6 @@ class ReportsController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
-    @mentioned_reports = @report.mentioned_reports
   end
 
   # GET /reports/new
@@ -25,9 +24,7 @@ class ReportsController < ApplicationController
     if @report.save
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
 
-      mentioning_report_ids.each do |report_id|
-        @report.mentioning_relations.create(mentioned_report_id: report_id)
-      end
+      @report.create_mentions
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,12 +34,9 @@ class ReportsController < ApplicationController
     if @report.update(report_params)
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
 
-      mentioning_report_ids.each do |report_id|
-        @report.mentioning_relations.create(mentioned_report_id: report_id)
-      end
-      unmentioned_report_ids = @report.mentioning_reports.map(&:id) - mentioning_report_ids
+      @report.create_mentions
 
-      @report.mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).map(&:destroy)
+      @report.delete_mentions
     else
       render :edit, status: :unprocessable_entity
     end
@@ -62,9 +56,5 @@ class ReportsController < ApplicationController
 
   def report_params
     params.require(:report).permit(:title, :content)
-  end
-
-  def mentioning_report_ids
-    @report[:content].scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
   end
 end
