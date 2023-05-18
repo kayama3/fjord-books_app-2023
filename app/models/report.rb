@@ -21,16 +21,17 @@ class Report < ApplicationRecord
   has_many :mentioned_relations, class_name: 'Mention', foreign_key: :mentioned_report_id, dependent: :destroy, inverse_of: :mentioned_report
   has_many :mentioned_reports, through: :mentioned_relations, source: :mentioning_report, dependent: :destroy
 
-  def create_mentions
-    mentioning_report_ids = content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
+  def mentioning_report_ids
+    content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
+  end
 
+  def create_mentions
     mentioning_report_ids.each do |report_id|
       mentioning_relations.create(mentioned_report_id: report_id)
     end
   end
 
   def delete_mentions
-    mentioning_report_ids = content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
     unmentioned_report_ids = mentioning_reports.map(&:id) - mentioning_report_ids
     mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).map(&:destroy)
   end
