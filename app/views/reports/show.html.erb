@@ -9,7 +9,7 @@
 <% if @report.mentioned_reports.exists? %>
   <p><%= t('views.common.mention_from', name: Report.model_name.human) %></p>
   <ul>
-    <% @report.mentioned_reports.each do |report| %>
+    <% @report.mentioned_reports.order(:id).each do |report| %>
       <li><%= link_to report[:title], report %></li>
     <% end %>
   </ul>

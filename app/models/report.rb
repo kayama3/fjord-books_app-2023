@@ -25,13 +25,21 @@ class Report < ApplicationRecord
     content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i)
   end
 
-  def create_mentions
+  def create_report_mentions
+    save
+
     mentioning_report_ids.each do |report_id|
       mentioning_relations.create(mentioned_report_id: report_id)
     end
   end
 
-  def delete_mentions
+  def update_report_mentions(params)
+    update(params)
+
+    mentioning_report_ids.each do |report_id|
+      mentioning_relations.create(mentioned_report_id: report_id)
+    end
+
     unmentioned_report_ids = mentioning_reports.map(&:id) - mentioning_report_ids
     mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).map(&:destroy)
   end
