@@ -21,38 +21,50 @@ class Report < ApplicationRecord
   has_many :mentioned_relations, class_name: 'Mention', foreign_key: :mentioned_report_id, dependent: :destroy, inverse_of: :mentioned_report
   has_many :mentioned_reports, through: :mentioned_relations, source: :mentioning_report, dependent: :destroy
 
+  def create_report_mentions
+    all_valid = true
+
+    transaction do
+      all_valid &= save
+
+      report_ids = find_report_ids
+      all_valid &= create_new_mentions(report_ids)
+
+      raise ActiveRecord::Rollback unless all_valid
+    end
+    all_valid
+  end
+
+  def update_report_mentions(params)
+    all_valid = true
+
+    transaction do
+      all_valid &= update(params)
+
+      report_ids = find_report_ids
+      mentioned_report_ids = report_ids - mentioning_reports.map(&:id)
+      unmentioned_report_ids = mentioning_reports.map(&:id) - report_ids
+
+      all_valid &= create_new_mentions(mentioned_report_ids)
+      records = mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).destroy_all
+      all_valid &= records.all?(&:destroyed?)
+
+      raise ActiveRecord::Rollback unless all_valid
+    end
+    all_valid
+  end
+
+  private
+
   def find_report_ids
     content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i).uniq
   end
 
   def create_new_mentions(ids)
-    ids.map do |report_id|
+    new_mentions = ids.map do |report_id|
       mentioning_relations.new(mentioned_report_id: report_id)
     end
-  end
 
-  def create_report_mentions
-    return unless save!
-
-    report_ids = find_report_ids
-
-    transaction do
-      new_mentions = create_new_mentions(report_ids)
-      new_mentions.each(&:save!)
-    end
-  end
-
-  def update_report_mentions(params)
-    return unless update!(params)
-
-    report_ids = find_report_ids
-    mentioned_report_ids = report_ids - mentioning_reports.map(&:id)
-    unmentioned_reports = mentioning_reports.map(&:id) - report_ids
-
-    transaction do
-      new_mentions = create_new_mentions(mentioned_report_ids)
-      new_mentions.each(&:save!)
-      mentioning_relations.where(mentioned_report_id: unmentioned_reports).map(&:destroy!)
-    end
+    new_mentions.each(&:save)
   end
 end
