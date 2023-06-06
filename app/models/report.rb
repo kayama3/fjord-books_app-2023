@@ -41,9 +41,10 @@ class Report < ApplicationRecord
     transaction do
       all_valid &= update(params)
 
-      report_ids = find_report_ids
-      mentioned_report_ids = report_ids - mentioning_reports.map(&:id)
-      unmentioned_report_ids = mentioning_reports.map(&:id) - report_ids
+      adding_repot_ids = find_adding_report_ids
+      existing_report_ids = mentioning_reports.ids
+      mentioned_report_ids = adding_repot_ids - existing_report_ids
+      unmentioned_report_ids = existing_report_ids - adding_repot_ids
 
       all_valid &= create_new_mentions(mentioned_report_ids)
       records = mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).destroy_all
@@ -56,15 +57,13 @@ class Report < ApplicationRecord
 
   private
 
-  def find_report_ids
+  def find_adding_report_ids
     content.scan(%r{http://localhost:3000/reports/(\d+)}).flatten.map(&:to_i).uniq
   end
 
   def create_new_mentions(ids)
-    new_mentions = ids.map do |report_id|
-      mentioning_relations.new(mentioned_report_id: report_id)
+    ids.each do |report_id|
+      mentioning_relations.new(mentioned_report_id: report_id).save
     end
-
-    new_mentions.each(&:save)
   end
 end
