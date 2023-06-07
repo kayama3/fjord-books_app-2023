@@ -41,12 +41,12 @@ class Report < ApplicationRecord
     transaction do
       all_valid &= update(params)
 
-      adding_repot_ids = find_adding_report_ids
+      adding_report_ids = find_adding_report_ids
       existing_report_ids = mentioning_reports.ids
-      mentioned_report_ids = adding_repot_ids - existing_report_ids
-      unmentioned_report_ids = existing_report_ids - adding_repot_ids
+      mentioned_report_ids = adding_report_ids - existing_report_ids
+      unmentioned_report_ids = existing_report_ids - adding_report_ids
 
-      all_valid &= create_new_mentions(mentioned_report_ids)
+      all_valid &= create_new_mentions(mentioned_report_ids).all?
       records = mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).destroy_all
       all_valid &= records.all?(&:destroyed?)
 
@@ -62,7 +62,7 @@ class Report < ApplicationRecord
   end
 
   def create_new_mentions(ids)
-    ids.each do |report_id|
+    ids.map do |report_id|
       mentioning_relations.new(mentioned_report_id: report_id).save
     end
   end
