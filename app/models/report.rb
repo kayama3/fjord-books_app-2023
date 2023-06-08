@@ -27,8 +27,8 @@ class Report < ApplicationRecord
     transaction do
       all_valid &= save
 
-      report_ids = find_report_ids
-      all_valid &= create_new_mentions(report_ids)
+      adding_report_ids = find_adding_report_ids
+      all_valid &= create_new_mentions(adding_report_ids)
 
       raise ActiveRecord::Rollback unless all_valid
     end
@@ -46,7 +46,7 @@ class Report < ApplicationRecord
       mentioned_report_ids = adding_report_ids - existing_report_ids
       unmentioned_report_ids = existing_report_ids - adding_report_ids
 
-      all_valid &= create_new_mentions(mentioned_report_ids).all?
+      all_valid &= create_new_mentions(mentioned_report_ids)
       records = mentioning_relations.where(mentioned_report_id: unmentioned_report_ids).destroy_all
       all_valid &= records.all?(&:destroyed?)
 
@@ -62,8 +62,10 @@ class Report < ApplicationRecord
   end
 
   def create_new_mentions(ids)
-    ids.map do |report_id|
+    new_mentions = ids.map do |report_id|
       mentioning_relations.new(mentioned_report_id: report_id).save
     end
+
+    new_mentions.all?
   end
 end

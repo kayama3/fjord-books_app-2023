@@ -7,7 +7,7 @@
 <%= render 'shared/comments', commentable: @report %>
 
 <% if @report.mentioned_reports.exists? %>
-  <p><%= t('views.common.mention_from', name: Report.model_name.human) %></p>
+  <p><%= t('.mention_from') %></p>
   <ul>
     <% @report.mentioned_reports.order(:id).each do |report| %>
       <li><%= link_to report[:title], report %></li>
