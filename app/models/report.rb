@@ -62,10 +62,8 @@ class Report < ApplicationRecord
   end
 
   def create_new_mentions(ids)
-    new_mentions = ids.map do |report_id|
+    ids.all? do |report_id|
       mentioning_relations.new(mentioned_report_id: report_id).save
     end
-
-    new_mentions.all?
   end
 end
