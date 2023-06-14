@@ -1,11 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user: one
-  title: MyString
-  content: MyText
-
-two:
-  user: two
-  title: MyString
-  content: MyText
+rails_test:
+  user: alice
+  title: Railsでテストを書くの課題作成中
+  content: テスト書くの楽しくなってきた〜！
