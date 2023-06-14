@@ -1,7 +1,9 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  test "name or email" do
+  test 'name or email' do
     user = User.new(email: 'foo@example.com', name: '')
     assert_equal 'foo@example.com', user.name_or_email
 
